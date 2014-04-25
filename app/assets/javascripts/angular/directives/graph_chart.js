@@ -160,6 +160,10 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           var min = bound.min > 0 ? 0 : bound.min;
 
           var enteredYMin = parseFloat(matchingAxis.yMin, 10);
+          var enteredYMax = parseFloat(matchingAxis.yMax, 10);
+          if (!isNaN(enteredYMax)) {
+            bound.max = enteredYMax;
+          }
           if (!isNaN(enteredYMin)) {
             // min is used for the linear scale; all numbers are acceptable.
             min = matchingAxis.yMin;
