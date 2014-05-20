@@ -95,10 +95,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           var enteredYMax = parseFloat(matchingAxis.yMax, 10);
           if (!isNaN(enteredYMax)) {
             bound.max = enteredYMax;
-            if (enteredYMax > graphMax) {
-              var last = s.data[s.data.length - 1];
-              s.data.push({x: last.x + 0.001, y: enteredYMax});
-            }
+            graphMax = enteredYMax;
           }
           if (!isNaN(enteredYMin)) {
             // min is used for the linear scale; all numbers are acceptable.
@@ -150,6 +147,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           element: graphEl,
           renderer: 'multi',
           min: yMinForGraph,
+          max: yScales[1](graphMax),
           interpolation: scope.graphSettings.interpolationMethod,
           series: series
         });
