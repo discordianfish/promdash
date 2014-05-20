@@ -6,14 +6,14 @@
       {{title()}}
 
       <div class="btn-group pull-right graph_config_menu">
-        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" title="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('datasources')" title="Datasources"><i class="icon-add-to-list"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('timerange')" title="Time options"><i class="icon-clock"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('graph')" title="Graph and axis settings"><i class="icon-line-graph"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('palette')" title="Palette"><i class="icon-palette"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('legend')" title="Legend Settings"><i class="icon-list"></i></div>
-        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)" title="Link to Graph"><i class="icon-link"></i></div>
-        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="graphDeleteModal()" title="Remove graph"><i class="icon-trash"></i></div>
+        <div ng-show="showControls || showTab || requestsInFlight" class="btn btn-primary btn-sm" ng-click="refreshGraph()" tooltip-append-to-body="true" tooltip="Refresh"><i ng-class="{spin:requestsInFlight}" class="icon-cycle"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('datasources')" tooltip-append-to-body="true" tooltip="Datasources"><i class="icon-add-to-list"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('timerange')" tooltip-append-to-body="true" tooltip="Time options"><i class="icon-clock"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('graph')" tooltip-append-to-body="true" tooltip="Graph and axis settings"><i class="icon-line-graph"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('palette')" tooltip-append-to-body="true" tooltip="Palette"><i class="icon-palette"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="toggleTab('legend')" tooltip-append-to-body="true" tooltip="Legend Settings"><i class="icon-list"></i></div>
+        <div ng-show="(showControls || showTab) && !widgetPage" class="btn btn-primary btn-sm" ng-click="toggleTab('staticlink'); generateWidgetLink($event)" tooltip-append-to-body="true" tooltip="Link to Graph"><i class="icon-link"></i></div>
+        <div ng-show="showControls || showTab" class="btn btn-primary btn-sm" ng-click="graphDeleteModal()" tooltip-append-to-body="true" tooltip="Remove graph"><i class="icon-trash"></i></div>
       </div>
 
     </div>
@@ -25,7 +25,13 @@
         <div class="panel-heading">Datasources</div>
         <div class="panel-body">
           <div ng-repeat="expr in graph.expressions">
-            <expression expr="expr" servers="servers" axes="graph.axes" servers-by-id="serversById" index="$index"></expression>
+            <expression
+              expr="expr"
+              servers="servers"
+              axes="graph.axes"
+              servers-by-id="serversById"
+              legend-format-strings="graph.legendFormatStrings"
+              index="$index"></expression>
           </div>
           <button class="btn btn-primary" ng-click="addExpression()">Add Expression</button>
         </div>
@@ -152,9 +158,15 @@
               value="never"> never</label>
           </div>
           <label>Legend format:</label>
-          <br />
-          <input class="form-control" ng-model="graph.legendFormatString">
-          <br/>
+          <div class="legend_string_container" ng-repeat="str in graph.legendFormatStrings track by $index">
+            <input class="form-control legend_string_input" ng-model="str.name">
+            <button class="btn btn-primary" type="button" ng-hide="$first" ng-click="removeLegendString($index)">
+              <i class="icon-cross"></i>
+            </button>
+            <button class="legend_string_add btn btn-primary" ng-show="$last" type="button" ng-click="addLegendString()">
+              <i class="icon-plus"></i>
+            </button>
+          </div>
         </div>
       </div>
 
