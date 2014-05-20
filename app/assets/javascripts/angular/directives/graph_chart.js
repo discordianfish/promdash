@@ -81,6 +81,7 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
         };
 
         var yScales = {};
+        var graphMax = Math.max.apply(Math, [axesBounds[1].max, axesBounds[2].max]);
         series.forEach(function(s) {
           var axes = scope.graphSettings.axes;
           var matchingAxis = axes.filter(function(a) {
@@ -94,6 +95,10 @@ angular.module("Prometheus.directives").directive('graphChart', ["$location", "W
           var enteredYMax = parseFloat(matchingAxis.yMax, 10);
           if (!isNaN(enteredYMax)) {
             bound.max = enteredYMax;
+            if (enteredYMax > graphMax) {
+              var last = s.data[s.data.length - 1];
+              s.data.push({x: last.x + 0.001, y: enteredYMax});
+            }
           }
           if (!isNaN(enteredYMin)) {
             // min is used for the linear scale; all numbers are acceptable.
